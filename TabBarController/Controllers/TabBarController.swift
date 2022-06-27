@@ -23,7 +23,6 @@ class TabBarController: UIViewController {
         self.tabs = tabs
         self.tabBar = TabBarView(barItems: tabs.map { $0.item })
         super.init(nibName: nil, bundle: nil)
-        configureViews(tabs)
     }
     
     required init?(coder: NSCoder) {
@@ -34,6 +33,7 @@ class TabBarController: UIViewController {
         super.viewDidLoad()
         view.backgroundColor = .white
         title = tabs.first?.item.title
+        configureViews(tabs)
     }
     
     override func viewWillAppear(_ animated: Bool) {
@@ -97,6 +97,7 @@ class TabBarController: UIViewController {
         if !isChildAdded {
             addChild(tabs[index].controller)
             stackView.subviews[index].addSubview(tabs[index].controller.view)
+            tabs[index].controller.didMove(toParent: self)
         }
     }
     
@@ -116,7 +117,7 @@ extension TabBarController: UIScrollViewDelegate {
 }
 
 extension TabBarController: TabBarViewDelegate {
-    func tabBarViewDidSelect(_ tabBarView: TabBarView, index: Int) {
-        selectedTabIndex = index
+    func tabBarView(_ tabBarView: TabBarView, didSelectItem item: Int) {
+        selectedTabIndex = item
     }
 }

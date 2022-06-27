@@ -8,7 +8,7 @@
 import UIKit
 
 protocol TabBarViewDelegate: AnyObject {
-    func tabBarViewDidSelect(_ tabBarView: TabBarView, index: Int)
+    func tabBarView(_ tabBarView: TabBarView, didSelectItem item: Int)
 }
 
 class TabBarView: UIView {
@@ -103,7 +103,7 @@ extension TabBarView: UICollectionViewDelegate, UICollectionViewDataSource, UICo
     
     func collectionView(_ collectionView: UICollectionView, didSelectItemAt indexPath: IndexPath) {
         handleItemSelectedStatusChanged(collectionView, selected: true, atIndexPath: indexPath)
-        delegate?.tabBarViewDidSelect(self, index: indexPath.item)
+        delegate?.tabBarView(self, didSelectItem: indexPath.item)
     }
     
     func collectionView(_ collectionView: UICollectionView, didDeselectItemAt indexPath: IndexPath) {
