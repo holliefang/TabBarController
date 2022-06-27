@@ -15,7 +15,7 @@ class TabBarItemCell: UICollectionViewCell {
     private let titleLabel = UILabel()
     
     override var isSelected: Bool {
-       didSet{
+       didSet {
            if isSelected {
                UIView.animate(withDuration: 0.3) {
                    self.contentView.backgroundColor = .darkGray

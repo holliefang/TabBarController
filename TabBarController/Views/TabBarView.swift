@@ -92,7 +92,7 @@ extension TabBarView: UICollectionViewDelegate, UICollectionViewDataSource, UICo
     
     func collectionView(_ collectionView: UICollectionView, cellForItemAt indexPath: IndexPath) -> UICollectionViewCell {
         let cell = collectionView.dequeueReusableCell(withReuseIdentifier: TabBarItemCell.reuseIdentitfier, for: indexPath) as! TabBarItemCell
-        cell.setTabBarItem(barItems[indexPath.item])
+        cell.setTabBarItem(barItems[indexPath.item], selected: selectedItem == indexPath.item)
         return cell
     }
     
@@ -102,14 +102,16 @@ extension TabBarView: UICollectionViewDelegate, UICollectionViewDataSource, UICo
     }
     
     func collectionView(_ collectionView: UICollectionView, didSelectItemAt indexPath: IndexPath) {
-        
-        let cell = collectionView.cellForItem(at: indexPath) as? TabBarItemCell
+        handleItemSelectedStatusChanged(collectionView, selected: true, atIndexPath: indexPath)
         delegate?.tabBarViewDidSelect(self, index: indexPath.item)
-        cell?.setTabBarItem(barItems[indexPath.item], selected: true)
     }
     
     func collectionView(_ collectionView: UICollectionView, didDeselectItemAt indexPath: IndexPath) {
+        handleItemSelectedStatusChanged(collectionView, selected: false, atIndexPath: indexPath)
+    }
+    
+    private func handleItemSelectedStatusChanged(_ collectionView: UICollectionView, selected: Bool, atIndexPath indexPath: IndexPath)  {
         let cell = collectionView.cellForItem(at: indexPath) as? TabBarItemCell
-        cell?.setTabBarItem(barItems[indexPath.item], selected: false)
+        cell?.setTabBarItem(barItems[indexPath.item], selected: selected)
     }
 }
