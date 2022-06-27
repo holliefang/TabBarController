@@ -8,7 +8,7 @@
 import UIKit
 
 protocol TabBarViewDelegate: AnyObject {
-    func tabBarView(_ tabBarView: TabBarView, didSelectItem item: Int)
+    func tabBarView(_ tabBarView: TabBarView, didSelectItemAt index: Int)
 }
 
 class TabBarView: UIView {
@@ -18,7 +18,7 @@ class TabBarView: UIView {
                                                   collectionViewLayout: UICollectionViewFlowLayout())
     weak var delegate: TabBarViewDelegate?
     
-    var selectedItem: Int? {
+    var selectedIndex: Int? {
         didSet {
             selectedItemDidUpdate(oldValue)
         }
@@ -58,8 +58,8 @@ class TabBarView: UIView {
     override func layoutSubviews() {
         super.layoutSubviews()
         collectionView.layoutIfNeeded()
-        if selectedItem == nil {
-            selectedItem = 0
+        if selectedIndex == nil {
+            selectedIndex = 0
         }
     }
     
@@ -68,12 +68,12 @@ class TabBarView: UIView {
     }
     
     private func selectedItemDidUpdate(_ oldValue: Int?) {
-        guard let selectedItem = selectedItem,
-              selectedItem != oldValue else {
+        guard let selectedIndex = selectedIndex,
+              selectedIndex != oldValue else {
             return
         }
         
-        let selectedIndexPath = IndexPath(row: selectedItem, section: 0)
+        let selectedIndexPath = IndexPath(row: selectedIndex, section: 0)
         
         collectionView.selectItem(at: selectedIndexPath, animated: true, scrollPosition: .centeredHorizontally)
         collectionView(collectionView, didSelectItemAt: selectedIndexPath)
@@ -92,7 +92,7 @@ extension TabBarView: UICollectionViewDelegate, UICollectionViewDataSource, UICo
     
     func collectionView(_ collectionView: UICollectionView, cellForItemAt indexPath: IndexPath) -> UICollectionViewCell {
         let cell = collectionView.dequeueReusableCell(withReuseIdentifier: TabBarItemCell.reuseIdentitfier, for: indexPath) as! TabBarItemCell
-        cell.setTabBarItem(barItems[indexPath.item], selected: selectedItem == indexPath.item)
+        cell.setTabBarItem(barItems[indexPath.item], selected: selectedIndex == indexPath.item)
         return cell
     }
     
@@ -103,7 +103,7 @@ extension TabBarView: UICollectionViewDelegate, UICollectionViewDataSource, UICo
     
     func collectionView(_ collectionView: UICollectionView, didSelectItemAt indexPath: IndexPath) {
         handleItemSelectedStatusChanged(collectionView, selected: true, atIndexPath: indexPath)
-        delegate?.tabBarView(self, didSelectItem: indexPath.item)
+        delegate?.tabBarView(self, didSelectItemAt: indexPath.item)
     }
     
     func collectionView(_ collectionView: UICollectionView, didDeselectItemAt indexPath: IndexPath) {

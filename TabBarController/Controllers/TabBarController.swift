@@ -87,7 +87,7 @@ class TabBarController: UIViewController {
             return
         }
         title = tabs[selectedTabIndex].item.title
-        tabBar.selectedItem = selectedTabIndex
+        tabBar.selectedIndex = selectedTabIndex
         addTabToChildIfNeeded(at: selectedTabIndex)
         scrollSelectedTabToVisisble(at: selectedTabIndex)
     }
@@ -117,7 +117,7 @@ extension TabBarController: UIScrollViewDelegate {
 }
 
 extension TabBarController: TabBarViewDelegate {
-    func tabBarView(_ tabBarView: TabBarView, didSelectItem item: Int) {
-        selectedTabIndex = item
+    func tabBarView(_ tabBarView: TabBarView, didSelectItemAt index: Int) {
+        selectedTabIndex = index
     }
 }
