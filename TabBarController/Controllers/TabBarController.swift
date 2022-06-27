@@ -13,6 +13,11 @@ class TabBarController: UIViewController {
     private let scrollView = UIScrollView()
     private let stackView = UIStackView()
     private let tabs: [Tab]
+    var selectedTabIndex: Int? {
+        didSet {
+            selectedTabIndexDidChange(oldValue)
+        }
+    }
     
     init(tabs: [Tab] = Tab.generateTabs()) {
         self.tabs = tabs
@@ -65,31 +70,53 @@ class TabBarController: UIViewController {
         stackView.trailingAnchor.constraint(equalTo: scrollView.trailingAnchor).isActive = true
         stackView.bottomAnchor.constraint(equalTo: scrollView.bottomAnchor).isActive = true
                 
-        for tab in tabs {
-            addChild(tab.controller)
-            stackView.addArrangedSubview(tab.controller.view)
-            tab.controller.view.translatesAutoresizingMaskIntoConstraints = false
-            tab.controller.view.heightAnchor.constraint(equalTo: scrollView.heightAnchor).isActive = true
-            tab.controller.view.widthAnchor.constraint(equalTo: scrollView.widthAnchor).isActive = true
+        for _ in 0..<tabs.count {
+            let placeholderView = UIView()
+            placeholderView.backgroundColor = .clear
+            placeholderView.translatesAutoresizingMaskIntoConstraints = false
+            stackView.addArrangedSubview(placeholderView)
+            placeholderView.heightAnchor.constraint(equalTo: scrollView.heightAnchor).isActive = true
+            placeholderView.widthAnchor.constraint(equalTo: scrollView.widthAnchor).isActive = true
         }
+        self.selectedTabIndex = 0
+    }
+    
+    private func selectedTabIndexDidChange(_ oldValue: Int?) {
+        guard let selectedTabIndex = selectedTabIndex,
+              selectedTabIndex != oldValue else {
+            return
+        }
+        title = tabs[selectedTabIndex].item.title
+        tabBar.selectedItem = selectedTabIndex
+        addTabToChildIfNeeded(at: selectedTabIndex)
+        scrollSelectedTabToVisisble(at: selectedTabIndex)
+    }
+    
+    private func addTabToChildIfNeeded(at index: Int) {
+        let isChildAdded = tabs[index].controller.view.isDescendant(of: view)
+        if !isChildAdded {
+            addChild(tabs[index].controller)
+            stackView.subviews[index].addSubview(tabs[index].controller.view)
+        }
+    }
+    
+    private func scrollSelectedTabToVisisble(at index: Int) {
+        let point = CGPoint(x: scrollView.bounds.width * CGFloat(index), y: 0)
+        let rect = CGRect(origin: point,
+                          size: scrollView.bounds.size)
+        scrollView.scrollRectToVisible(rect, animated: true)
     }
 }
 
 extension TabBarController: UIScrollViewDelegate {
-    
     func scrollViewWillEndDragging(_ scrollView: UIScrollView, withVelocity velocity: CGPoint, targetContentOffset: UnsafeMutablePointer<CGPoint>) {
         let index = Int(targetContentOffset.pointee.x / scrollView.bounds.width)
-        title = tabs[index].item.title
-        tabBar.selectedItem = index
+        selectedTabIndex = index
     }
 }
 
 extension TabBarController: TabBarViewDelegate {
     func tabBarViewDidSelect(_ tabBarView: TabBarView, index: Int) {
-        let point = CGPoint(x: scrollView.bounds.width * CGFloat(index), y: 0)
-        let rect = CGRect(origin: point,
-                          size: scrollView.bounds.size)
-        title = tabs[index].item.title
-        scrollView.scrollRectToVisible(rect, animated: true)
+        selectedTabIndex = index
     }
 }
