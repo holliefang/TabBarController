@@ -86,10 +86,10 @@ extension TabBarController: UIScrollViewDelegate {
 
 extension TabBarController: TabBarViewDelegate {
     func tabBarViewDidSelect(_ tabBarView: TabBarView, index: Int) {
-        
         let point = CGPoint(x: scrollView.bounds.width * CGFloat(index), y: 0)
         let rect = CGRect(origin: point,
                           size: scrollView.bounds.size)
+        title = tabs[index].item.title
         scrollView.scrollRectToVisible(rect, animated: true)
     }
 }

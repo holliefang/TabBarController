@@ -13,7 +13,21 @@ class TabBarItemCell: UICollectionViewCell {
     
     private let iconImageView = UIImageView()
     private let titleLabel = UILabel()
-    private var item: TabBarItem?
+    
+    override var isSelected: Bool {
+       didSet{
+           if isSelected {
+               UIView.animate(withDuration: 0.3) {
+                   self.contentView.backgroundColor = .darkGray
+               }
+           }
+           else {
+               UIView.animate(withDuration: 0.3) {
+                   self.contentView.backgroundColor = .lightGray
+               }
+           }
+       }
+   }
     
     override init(frame: CGRect) {
         super.init(frame: .zero)
@@ -41,7 +55,6 @@ class TabBarItemCell: UICollectionViewCell {
     func setTabBarItem(_ item: TabBarItem, selected: Bool = false) {
         iconImageView.image = selected ? item.selectedIcon : item.icon
         titleLabel.text = item.title
-        self.item = item
     }
     
     required init?(coder: NSCoder) {

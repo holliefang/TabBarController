@@ -12,11 +12,6 @@ struct Tab {
     let controller: UIViewController
     
     static func generateTabs() -> [Tab] {        
-        let notification = UIViewController()
-        notification.view.backgroundColor = .systemPink
-        
-        let me = UIViewController()
-        me.view.backgroundColor = .green
         
         return [
             Tab(item: TabBarItem(icon: UIImage(systemName: "house"),
@@ -30,11 +25,11 @@ struct Tab {
             Tab(item: TabBarItem(icon: UIImage(systemName: "bell"),
                                  selectedIcon: UIImage(systemName: "bell.fill"),
                                  title: "Notification"),
-                controller: notification),
+                controller: NotificationController()),
             Tab(item: TabBarItem(icon: UIImage(systemName: "person"),
                                  selectedIcon: UIImage(systemName: "person.fill"),
                                  title: "Me"),
-                controller: me),
+                controller: MeController()),
         ]
     }
 }

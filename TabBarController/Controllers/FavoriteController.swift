@@ -9,10 +9,6 @@ import UIKit
 
 class FavoriteController: UIViewController {
     
-    override func loadView() {
-        super.loadView()
-    }
-    
     override func viewDidLoad() {
         super.viewDidLoad()
         view.backgroundColor = .systemPink
