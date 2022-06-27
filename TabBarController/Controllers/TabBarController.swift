@@ -31,8 +31,6 @@ class TabBarController: UIViewController {
     
     override func viewDidLoad() {
         super.viewDidLoad()
-        view.backgroundColor = .white
-        title = tabs.first?.item.title
         configureViews(tabs)
     }
     
@@ -43,6 +41,8 @@ class TabBarController: UIViewController {
     }
     
     private func configureViews(_ tabs: [Tab]) {
+        view.backgroundColor = .white
+        
         view.addSubview(tabBar)
         view.addSubview(scrollView)
         scrollView.addSubview(stackView)
