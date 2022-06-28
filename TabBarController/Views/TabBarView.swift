@@ -37,10 +37,12 @@ class TabBarView: UIView {
         collectionView.showsHorizontalScrollIndicator = false
         collectionView.showsVerticalScrollIndicator = false
         collectionView.allowsMultipleSelection = false
+        collectionView.isScrollEnabled = false
+        collectionView.bounces = false
         collectionView.delegate = self
         collectionView.dataSource = self
         if let flowLayout = collectionView.collectionViewLayout as? UICollectionViewFlowLayout {
-            flowLayout.minimumLineSpacing = 2
+            flowLayout.minimumLineSpacing = 1
             flowLayout.scrollDirection = .horizontal
         }
 
@@ -97,7 +99,7 @@ extension TabBarView: UICollectionViewDelegate, UICollectionViewDataSource, UICo
     }
     
     func collectionView(_ collectionView: UICollectionView, layout collectionViewLayout: UICollectionViewLayout, sizeForItemAt indexPath: IndexPath) -> CGSize {
-        return CGSize(width: (collectionView.bounds.size.width / CGFloat(barItems.count)) - 1,
+        return CGSize(width: (collectionView.bounds.size.width / CGFloat(barItems.count)),
                       height: collectionView.bounds.height)
     }
     
